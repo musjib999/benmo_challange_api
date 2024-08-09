@@ -18,14 +18,14 @@ class PostController {
 
             const savedPost = await newPost.save();
             const user = await User.findById(userId);
-    
+
             if (!user) {
                 return { ok: false, message: 'User not found' };
+            } else {
+                user.posts += 1;
+                await user.save();
+                return { ok: true, data: savedPost, message: "Post added successfully" };
             }
-    
-            user.postCount += 1;
-            await user.save();
-            return { ok: true, data: savedPost, message: "Post added successfully" };
         } catch (error) {
             console.error('Error adding post :::', error.message);
             return { ok: false, message: error.message };
@@ -34,7 +34,7 @@ class PostController {
 
     async posts() {
         try {
-            const posts = await Post.find().populate('assigned_to', 'username'); // Optionally populate the assigned user
+            const posts = await Post.find().populate('assigned_to', 'username profilePic');
             return { ok: true, data: posts };
         } catch (error) {
             console.error("Error getting posts :::", error.message);
@@ -56,9 +56,10 @@ class PostController {
         }
     }
 
+
     async getUserPosts(userId) {
         try {
-            const posts = await Post.find({ 'assigned_to': userId }).populate('assigned_to', 'username');
+            const posts = await Post.find({ 'assigned_to': userId }).populate('assigned_to', 'username profilePic');
             return { ok: true, data: posts };
         } catch (error) {
             console.error("Error getting assigned shipments :::", error.message);
@@ -69,23 +70,23 @@ class PostController {
     async deletePost(postId, userId) {
         try {
             const post = await Post.findById(postId);
-    
+
             if (!post) {
                 return { ok: false, message: 'Post not found' };
             }
-    
+
             if (post.assigned_to.toString() !== userId) {
                 return { ok: false, message: 'User not authorized to delete this post' };
             }
-    
+
             await Post.findByIdAndDelete(postId);
-    
+
             const user = await User.findById(userId);
             if (user) {
                 user.postCount -= 1;
                 await user.save();
             }
-    
+
             return { ok: true, message: 'Post deleted successfully' };
         } catch (error) {
             console.error('Error deleting post:', error);
