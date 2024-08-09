@@ -67,6 +67,32 @@ class PostController {
         }
     }
 
+    async addComment(postId, userId, commentText) {
+        try {
+            const post = await Post.findById(postId);
+            if (!post) {
+                return { ok: false, message: 'Post not found' };
+            } else {
+                const newComment = {
+                    user: userId,
+                    comment: commentText,
+                    timestamp: new Date()
+                };
+
+                post.comments.push(newComment);
+
+                const updatedPost = await post.save();
+
+                return { ok: true, data: updatedPost, message: 'Comment added successfully' };
+            }
+
+        } catch (error) {
+            console.error('Error adding comment:', error.message);
+            return { ok: false, message: error.message };
+        }
+    }
+
+
     async deletePost(postId, userId) {
         try {
             const post = await Post.findById(postId);

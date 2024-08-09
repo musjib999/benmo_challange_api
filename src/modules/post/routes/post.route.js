@@ -60,6 +60,22 @@ module.exports = (UPLOADS) => {
         }
     });
 
+    api.post("/post/:postId/comment", async (req, res) => {
+        try {
+            const { postId } = req.params;
+            const { userId, commentText } = req.body;
+
+            const { ok, data, message } = await PostController.addComment(postId, userId, commentText);
+            if (ok) {
+                res.status(201).json({ ok, data, message });
+            } else {
+                res.status(500).json({ ok, message });
+            }
+        } catch (error) {
+            res.status(500).json({ ok: false, message: error.message });
+        }
+    });
+
     api.delete("/:postId", async (req, res) => {
         try {
             const postId = req.params.postId;
