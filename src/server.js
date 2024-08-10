@@ -1,5 +1,5 @@
 const UPLOADS = __dirname + "/uploads"
-// require("./connections/mongo.connection")();
+require("./connections/mongo.connection")();
 // const { verifyToken } = require("./middleware/auth.middleware")
 const { appPort } = require("./configs");
 const express = require("express");

@@ -21,7 +21,7 @@ class PostController {
 
             if (!user) {
                 return { ok: false, message: 'User not found' };
-            } else {
+            }else{
                 user.posts += 1;
                 await user.save();
                 return { ok: true, data: savedPost, message: "Post added successfully" };

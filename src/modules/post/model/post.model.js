@@ -13,13 +13,13 @@ const PostSchema = new mongoose.Schema({
     image_url: { type: String },
     created_at: { type: Date, default: Date.now },
     comments: [CommentSchema],
-    likes: { type: Number, default: 0 },
+    likes: { type: Number, image_urldefault: 0 },
     status: {
         type: String,
         enum: ['In Progress', 'Completed', 'Overdue'],
         default: 'In Progress'
     },
-    assigned_to: { type: Schema.Types.ObjectId, ref: 'User' }
+    assigned_to: { type: Schema.Types.ObjectId, ref: 'User', required: true }
 });
 
 module.exports = mongoose.model('Post', PostSchema);
