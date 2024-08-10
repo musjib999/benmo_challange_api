@@ -32,10 +32,12 @@ A full-featured social media application built using Node.js, Express, and Mongo
 - **GET** `/api/v1/post/:postId`: Get a single post by ID, with comments and populated user info
 - **DELETE** `/api/v1/post/:postId`: Delete a post by ID
 - **POST** `/api/v1/post/:postId/comment`: Add a comment to a post
+- **POST** `/api/v1/post/:postId/:userId/like`: Like a post
 
 ### Follow
 
 - **POST** `/api/v1/user/:userId/follow`: Follow a user
+- **POST** `/api/v1/user/:userId/unfollow`: Unfollow a user
 - **GET** `/api/v1/user/:userId/followers`: Get followers of a user
 
 ## Installation and Setup
