@@ -18,13 +18,14 @@ const UserSchema = new mongoose.Schema(
             required: true
         },
         username: {
+            index: { unique: true },
             type: String,
             required: true
         },
-        followers: {
-            type: Number,
-            default: 0
-        },
+        followers: [{
+            type: mongoose.Schema.Types.ObjectId,
+            ref: 'User'
+        }],
         profilePic: {
             type: String,
         },
@@ -36,25 +37,19 @@ const UserSchema = new mongoose.Schema(
     { timestamps: true }
 );
 
-UserSchema.pre("save", function (next, opt) {
-    let { skipHashing } = opt;
-    if (!skipHashing) {
+UserSchema.pre("save", function (next) {
         bcrypt.hash(this.password, 10, async (err, hash) => {
             if (err) return next(err);
             this.password = hash;
-            this.fullName = `${this.firstName} ${this.lastName}`;
             next();
         });
-    } else {
-        console.log("Skipping Password Hash !!!");
-        next()
-    }
 });
 
 UserSchema.methods.isValidPassword = function (password) {
     if (!this.password) {
         throw new Error("Password is not set for this user");
     }
+    console.log('Is Password correct?', bcrypt.compare(password, this.password));
     return bcrypt.compare(password, this.password);
 };
 

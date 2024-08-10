@@ -44,7 +44,7 @@ class PostController {
 
     async post(id) {
         try {
-            const post = await Post.findById(id).populate('assigned_to').populate('comments.user');
+            const post = await Post.findById(id).populate('assigned_to').populate('comments.user', 'username profilePic');
             if (!post) {
                 return { ok: false, message: 'Post not found' };
             } else {

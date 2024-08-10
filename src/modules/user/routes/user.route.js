@@ -36,5 +36,19 @@ module.exports = () => {
         }
       });
 
+      api.post("/:userId/:followeeId/follow", async (req, res) => {
+        try {
+          const { userId, followeeId } = req.params;
+          const { ok, message } = await AuthController.followUser(userId, followeeId);
+          if (ok) {
+            res.status(200).json({ ok, message });
+          } else {
+            res.status(500).json({ ok, message });
+          }
+        } catch (error) {
+          res.status(500).json({ ok: false, message: error.message });
+        }
+      });
+
       return api;
 }

@@ -27,9 +27,10 @@ class AuthController {
             }
 
             const isValid = await user.isValidPassword(password);
+            console.log(isValid);
             if (!isValid) {
                 throw new Error("Invalid password");
-            } 0
+            }
 
             const accessToken = this.encodeToken(
                 { email: user.email, id: user._id },
@@ -48,7 +49,7 @@ class AuthController {
 
     async followUser(followerId, followeeId) {
         try {
-            const followee = await User.findById(followeeId);
+            const followee = await AuthModel.findById(followeeId);
     
             if (!followee) {
                 console.log('User to follow not found');

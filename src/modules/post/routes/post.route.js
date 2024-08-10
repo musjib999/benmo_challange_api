@@ -60,7 +60,7 @@ module.exports = (UPLOADS) => {
         }
     });
 
-    api.post("/post/:postId/comment", async (req, res) => {
+    api.post("/:postId/comment", async (req, res) => {
         try {
             const { postId } = req.params;
             const { userId, commentText } = req.body;
