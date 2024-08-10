@@ -14,6 +14,7 @@ const PostSchema = new mongoose.Schema({
     created_at: { type: Date, default: Date.now },
     comments: [CommentSchema],
     likes: { type: Number, image_urldefault: 0 },
+    likedBy: [{ type: Schema.Types.ObjectId, ref: 'User' }],
     status: {
         type: String,
         enum: ['In Progress', 'Completed', 'Overdue'],

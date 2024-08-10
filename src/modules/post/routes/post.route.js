@@ -76,6 +76,21 @@ module.exports = (UPLOADS) => {
         }
     });
 
+    api.post("/:postId/:userId/like", async (req, res) => {
+        try {
+            const { postId, userId } = req.params;
+
+            const { ok, message } = await PostController.likePost(postId, userId);
+            if (ok) {
+                res.status(201).json({ ok, message });
+            } else {
+                res.status(500).json({ ok, message });
+            }
+        } catch (error) {
+            res.status(500).json({ ok: false, message: error.message });
+        }
+    });
+
     api.delete("/:postId", async (req, res) => {
         try {
             const postId = req.params.postId;

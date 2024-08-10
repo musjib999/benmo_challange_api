@@ -53,7 +53,6 @@ UserSchema.methods.isValidPassword = function (password) {
     if (!this.password) {
         throw new Error("Password is not set for this user");
     }
-    console.log('Is Password correct?', bcrypt.compare(password, this.password));
     return bcrypt.compare(password, this.password);
 };
 

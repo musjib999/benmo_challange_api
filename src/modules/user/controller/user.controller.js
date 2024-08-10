@@ -53,7 +53,7 @@ class AuthController {
     
             if (!followee) {
                 console.log('User to follow not found');
-                return { success: false, message: 'User not found' };
+                throw new Error("User not found");
             }
     
             if (!followee.followers.includes(followerId)) {
@@ -62,13 +62,38 @@ class AuthController {
                 console.log(`${followerId} is now following ${followeeId}`);
                 return { ok: true, message: 'User followed successfully' };
             } else {
-                return { ok: false, message: 'Already following this user' };
+                throw new Error("Already following this user");
             }
         } catch (error) {
             console.error('Error following user:', error);
             return { ok: false, message: error.message };
         }
     }
+
+    async unfollowUser(followerId, followeeId) {
+        try {
+            const followee = await AuthModel.findById(followeeId);
+    
+            if (!followee) {
+                console.log('User to unfollow not found');
+                throw new Error("User not found");
+            }
+
+            const index = followee.followers.indexOf(followerId);
+            if (index > -1) {
+                followee.followers.splice(index, 1);
+                await followee.save();
+                console.log(`${followerId} has unfollowed ${followeeId}`);
+                return { ok: true, message: 'User unfollowed successfully' };
+            } else {
+                throw new Error("User was not being followed");
+            }
+        } catch (error) {
+            console.error('Error unfollowing user:', error);
+            return { ok: false, message: error.message };
+        }
+    }
+    
 
 
     encodeToken(payload, options = {}) {

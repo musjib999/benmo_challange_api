@@ -20,7 +20,7 @@ class PostController {
             const user = await User.findById(userId);
 
             if (!user) {
-                return { ok: false, message: 'User not found' };
+                throw new Error("User not found");
             }else{
                 user.posts += 1;
                 await user.save();
@@ -46,7 +46,7 @@ class PostController {
         try {
             const post = await Post.findById(id).populate('assigned_to').populate('comments.user', 'username profilePic');
             if (!post) {
-                return { ok: false, message: 'Post not found' };
+                throw new Error('Post not found');
             } else {
                 return { ok: true, data: post };
             }
@@ -71,7 +71,7 @@ class PostController {
         try {
             const post = await Post.findById(postId);
             if (!post) {
-                return { ok: false, message: 'Post not found' };
+                throw new Error('Post not found');
             } else {
                 const newComment = {
                     user: userId,
@@ -92,17 +92,40 @@ class PostController {
         }
     }
 
+    async likePost(postId, userId) {
+        try {
+            const post = await Post.findById(postId);
+    
+            if (!post) {
+                throw new Error('Post not found');
+            }
+    
+            if (!post.likedBy.includes(userId)) {
+                post.likes += 1;
+                post.likedBy.push(userId);
+                await post.save();
+                return { ok: true, message: 'Post liked successfully', data: post };
+            } else {
+                throw new Error('User has already liked this post');
+            }
+        } catch (error) {
+            console.error('Error liking post:', error);
+            return { ok: false, message: error.message };
+        }
+    }
+    
+
 
     async deletePost(postId, userId) {
         try {
             const post = await Post.findById(postId);
 
             if (!post) {
-                return { ok: false, message: 'Post not found' };
+                throw new Error('Post not found');
             }
 
             if (post.assigned_to.toString() !== userId) {
-                return { ok: false, message: 'User not authorized to delete this post' };
+                throw new Error('User not authorized to delete this post');
             }
 
             await Post.findByIdAndDelete(postId);
