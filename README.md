@@ -40,6 +40,7 @@ A full-featured social media application built using Node.js, Express, and Mongo
 - **POST** `/api/v1/user/:userId/unfollow`: Unfollow a user
 - **GET** `/api/v1/user/:userId/followers`: Get followers of a user
 
+[See full api documentation](https://documenter.getpostman.com/view/33550472/2sA3s3HWrj)
 ## Installation and Setup
 
 ### Prerequisites

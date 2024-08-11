@@ -106,7 +106,7 @@ class PostController {
                 await post.save();
                 return { ok: true, message: 'Post liked successfully', data: post };
             } else {
-                throw new Error('User has already liked this post');
+                return { ok: false, message: 'User has already liked this post' };
             }
         } catch (error) {
             console.error('Error liking post:', error);
